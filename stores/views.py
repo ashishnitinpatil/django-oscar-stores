@@ -44,6 +44,7 @@ class StoreListView(generic.ListView):
         group = data.get('group', None)
         if group:
             queryset = queryset.filter(group=group)
+            self.group = group
 
         latlng = self.form.point
         if latlng:
@@ -95,6 +96,7 @@ class StoreListView(generic.ListView):
         ctx = super(StoreListView, self).get_context_data(**kwargs)
 
         ctx['form'] = self.form
+        ctx['selected_group'] = self.group.name if hasattr(self, 'group') and self.group else ''
         ctx['all_stores'] = self.model.objects.select_related('group', 'address').all()
 
         if hasattr(self.form, 'point') and self.form.point:
